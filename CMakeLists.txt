@@ -3,6 +3,7 @@ project(CMakeSFMLProject LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# SFML 3.x via FetchContent
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -12,6 +13,17 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp)
-target_compile_features(main PRIVATE cxx_std_17)
-target_link_libraries(main PRIVATE SFML::Graphics SFML::Audio)
+find_package(SFML 3 REQUIRED COMPONENTS Graphics Audio Network)
+
+add_executable(ClashOfTitans
+    src/main.cpp
+    src/Player.cpp
+    src/Bullet.cpp
+    src/Jets.cpp
+    src/HUD.cpp
+)
+
+target_include_directories(ClashOfTitans PRIVATE ${CMAKE_SOURCE_DIR}/Include)
+
+target_compile_features(ClashOfTitans PRIVATE cxx_std_17)
+target_link_libraries(ClashOfTitans PRIVATE SFML::Graphics SFML::Audio SFML::Network)
